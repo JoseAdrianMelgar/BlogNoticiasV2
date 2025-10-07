@@ -1,0 +1,41 @@
+@model IEnumerable<BlogNoticiasV2.Models.Post>
+@using System.Web
+@{
+    ViewBag.Title = "Inicio";
+}
+
+<div class="jumbotron p-5 mb-4 bg-light rounded-3">
+    <div class="container py-5">
+        <h1 class="display-5 fw-bold">Bienvenido a BlogNoticiasV2</h1>
+        <p class="col-md-8 fs-4">Comparte y descubre noticias de la comunidad. Regístrate para publicar tus propios artículos.</p>
+        @if (!Request.IsAuthenticated)
+        {
+            <a class="btn btn-primary btn-lg" href="@Url.Action("Register", "Account")">Crear cuenta</a>
+        }
+    </div>
+</div>
+
+<h2>Últimas publicaciones</h2>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        var resumen = (item.Contenido ?? string.Empty).Length > 150
+            ? (item.Contenido ?? string.Empty).Substring(0, 150) + "..."
+            : item.Contenido ?? string.Empty;
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Titulo)</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@item.Categoria?.Nombre</h6>
+                    <p class="card-text">@Html.Raw(HttpUtility.HtmlEncode(resumen))</p>
+                </div>
+                <div class="card-footer text-muted">
+                    Por @((item.Autor?.DisplayName) ?? item.Autor?.Email) el @item.FechaPublicacion.ToString("dd/MM/yyyy")
+                    <div class="mt-2">
+                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Details", "Posts", new { id = item.Id })">Leer más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
