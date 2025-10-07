@@ -1,0 +1,22 @@
+@model BlogNoticiasV2.Models.Post
+@using Microsoft.AspNet.Identity
+@using System.Web
+@{
+    ViewBag.Title = Model.Titulo;
+}
+<h2>@Model.Titulo</h2>
+<div class="mb-3 text-muted">
+    Por @(Model.Autor?.DisplayName ?? Model.Autor?.Email) en @Model.Categoria?.Nombre el @Model.FechaPublicacion.ToString("dd/MM/yyyy HH:mm")
+</div>
+<div class="mb-4">
+    @Html.Raw(HttpUtility.HtmlEncode(Model.Contenido ?? string.Empty).Replace("\n", "<br />"))
+</div>
+<a class="btn btn-secondary" href="@Url.Action("Index")">Volver</a>
+@if (User.IsInRole("Admin") || (Request.IsAuthenticated && Model.AutorId == User.Identity.GetUserId()))
+{
+    <a class="btn btn-primary" href="@Url.Action("Edit", new { id = Model.Id })">Editar</a>
+}
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = Model.Id })">Eliminar</a>
+}

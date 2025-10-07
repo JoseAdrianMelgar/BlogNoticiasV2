@@ -1,0 +1,18 @@
+@model BlogNoticiasV2.Models.ManageIndexViewModel
+@{
+    ViewBag.Title = "Administrar cuenta";
+}
+<h2>@ViewBag.Title</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.StatusMessage as string))
+{
+    <div class="alert alert-info">@ViewBag.StatusMessage</div>
+}
+
+<div class="list-group mb-4">
+    <a class="list-group-item list-group-item-action" href="@Url.Action("ChangePassword")">Cambiar contraseña</a>
+    @if (!Model.HasPassword)
+    {
+        <a class="list-group-item list-group-item-action" href="@Url.Action("SetPassword")">Definir contraseña</a>
+    }
+</div>

@@ -1,0 +1,17 @@
+@model BlogNoticiasV2.Models.Category
+@{
+    ViewBag.Title = "Eliminar categoría";
+}
+<h2>@ViewBag.Title</h2>
+<h3>¿Está seguro de que desea eliminar esta categoría?</h3>
+<dl class="row">
+    <dt class="col-sm-3">Nombre</dt>
+    <dd class="col-sm-9">@Model.Nombre</dd>
+</dl>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a class="btn btn-secondary" href="@Url.Action("Index")">Cancelar</a>
+}

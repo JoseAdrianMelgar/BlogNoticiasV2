@@ -1,0 +1,35 @@
+@model BlogNoticiasV2.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Registrarse";
+}
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "mt-4" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.DisplayName, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.DisplayName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DisplayName, null, new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "form-label" })
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "text-danger" })
+    </div>
+    <button type="submit" class="btn btn-primary">Registrarme</button>
+}
+
+@section Scripts {
+    @Html.Partial("_ValidationScriptsPartial")
+}

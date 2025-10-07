@@ -1,0 +1,47 @@
+@model IEnumerable<BlogNoticiasV2.Controllers.AdminUserViewModel>
+@{
+    ViewBag.Title = "Administración de usuarios";
+    var roles = ViewBag.Roles as IEnumerable<string> ?? new List<string>();
+}
+<h2>@ViewBag.Title</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Correo</th>
+            <th>Nombre</th>
+            <th>Rol actual</th>
+            <th>Asignar nuevo rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.DisplayName</td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>
+                    @using (Html.BeginForm("AssignRole", "Admin", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("userId", user.UserId)
+                        <div class="input-group">
+                            @Html.DropDownList("roleName", new SelectList(roles), "Seleccione un rol", new { @class = "form-select" })
+                            <button type="submit" class="btn btn-primary">Asignar</button>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

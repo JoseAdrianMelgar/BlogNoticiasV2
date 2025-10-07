@@ -1,0 +1,52 @@
+@model IEnumerable<BlogNoticiasV2.Models.Post>
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Publicaciones";
+}
+<h2>@ViewBag.Title</h2>
+
+@if (Request.IsAuthenticated)
+{
+    <p>
+        <a class="btn btn-primary" href="@Url.Action("Create")">Crear nueva publicación</a>
+    </p>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Titulo)</th>
+            <th>Autor</th>
+            <th>Categoría</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().FechaPublicacion)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+                <td>@(item.Autor?.DisplayName ?? item.Autor?.Email)</td>
+                <td>@item.Categoria?.Nombre</td>
+                <td>@item.FechaPublicacion.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-secondary" href="@Url.Action("Details", new { id = item.Id })">Detalles</a>
+                    @if (User.IsInRole("Admin") || (Request.IsAuthenticated && item.AutorId == User.Identity.GetUserId()))
+                    {
+                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", new { id = item.Id })">Editar</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-sm btn-outline-danger" href="@Url.Action("Delete", new { id = item.Id })">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No hay publicaciones registradas todavía.</div>
+}
